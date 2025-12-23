@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "V33XrkdaYYg=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Tuan\\Desktop\\LogStream-AI\\dashboard\\LogStreamDashboard\\LogStreamDashboard.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Tuan\\.nuget\\packages\\confluent.kafka\\2.3.0\\confluent.kafka.2.3.0.nupkg.sha512",
+    "C:\\Users\\Tuan\\.nuget\\packages\\librdkafka.redist\\2.3.0\\librdkafka.redist.2.3.0.nupkg.sha512",
+    "C:\\Users\\Tuan\\.nuget\\packages\\system.memory\\4.5.0\\system.memory.4.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}

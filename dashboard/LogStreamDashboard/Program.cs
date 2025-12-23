@@ -1,0 +1,135 @@
+using Microsoft.AspNetCore.SignalR;
+using System.Text;
+
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSignalR();
+builder.Services.AddHostedService<KafkaConsumerService>();
+
+var app = builder.Build();
+
+app.UseRouting();
+app.MapHub<LogHub>("/logHub");
+
+app.MapGet("/", async context =>
+{
+    context.Response.ContentType = "text/html";
+    await context.Response.WriteAsync(@"
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Mission Control</title>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
+    <style>
+        body { background-color: #121212; color: #ffffff; }
+        .card { transition: all 0.3s; border: none; }
+        .bg-success { background-color: #198754 !important; }
+        .bg-danger { background-color: #dc3545 !important; }
+    </style>
+</head>
+<body>
+    <div class='container mt-5'>
+        <div class='text-center mb-4'>
+            <h1 class='display-4 fw-bold'>System Health Monitor</h1>
+            <p class='text-muted'>Live Polyglot Architecture: Python • Java • C# • Kafka</p>
+        </div>
+        <div class='row mb-4'>
+            <div class='col-md-4'>
+                <div id='card-payment' class='card text-white bg-success shadow-sm'>
+                    <div class='card-body text-center'>
+                        <h5 class='card-title'>Payment Service</h5>
+                        <h2 id='status-payment'>ONLINE</h2>
+                        <small>Nginx / Alpine</small>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-4'>
+                <div id='card-inventory' class='card text-white bg-success shadow-sm'>
+                    <div class='card-body text-center'>
+                        <h5 class='card-title'>Inventory Service</h5>
+                        <h2 id='status-inventory'>ONLINE</h2>
+                        <small>Java Spring Boot</small>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-4'>
+                <div class='card bg-dark text-white border border-secondary shadow-sm'>
+                    <div class='card-body text-center'>
+                        <h5 class='card-title'>AI SRE Agent</h5>
+                        <h2 id='ai-status' class='text-info'>WATCHING</h2>
+                        <small id='ai-last-action'>DeepSeek-R1 Model</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='card bg-dark border border-secondary shadow-sm'>
+            <div class='card-body'>
+                <canvas id='liveChart' height='100'></canvas>
+            </div>
+        </div>
+    </div>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js'></script>
+    <script>
+        const ctx = document.getElementById('liveChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'System Latency (ms)',
+                    borderColor: '#0d6efd',
+                    backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                    data: [],
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: { 
+                    y: { beginAtZero: true, grid: { color: '#333' } },
+                    x: { grid: { color: '#333' } }
+                }
+            }
+        });
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl('/logHub')
+            .withAutomaticReconnect()
+            .build();
+        connection.on('ReceiveLog', (logJson) => {
+            const log = JSON.parse(logJson);
+            const timestamp = new Date().toLocaleTimeString();
+            const isPayment = log.service === 'payment-service';
+            const cardId = isPayment ? 'card-payment' : 'card-inventory';
+            const textId = isPayment ? 'status-payment' : 'status-inventory';
+            const card = document.getElementById(cardId);
+            const text = document.getElementById(textId);
+            if (log.status === 'DOWN') {
+                card.className = 'card text-white bg-danger shadow-sm';
+                text.innerText = 'CRITICAL FAIL';
+                document.getElementById('ai-status').innerText = 'FIXING...';
+                document.getElementById('ai-status').className = 'text-warning';
+            } else {
+                card.className = 'card text-white bg-success shadow-sm';
+                text.innerText = 'ONLINE';
+                document.getElementById('ai-status').innerText = 'WATCHING';
+                document.getElementById('ai-status').className = 'text-info';
+            }
+            if (chart.data.labels.length > 20) {
+                chart.data.labels.shift();
+                chart.data.datasets[0].data.shift();
+            }
+            chart.data.labels.push(timestamp);
+            chart.data.datasets[0].data.push(log.code === 200 ? 50 : 0);
+            chart.update();
+        });
+        connection.start().catch(err => console.error(err));
+    </script>
+</body>
+</html>
+    ");
+});
+
+app.Run();
