@@ -15,9 +15,10 @@
 **LogStream-AI** is a proof-of-concept **Autonomous SRE (Site Reliability Engineering) Platform**. It demonstrates a fully closed-loop system where an AI agent monitors a polyglot microservices architecture, detects failures in real-time via Kafka, and autonomously repairs the infrastructure using Docker commands.
 
 ---
-![Operational](screenshots/idle.png = 250x250)
+| Operational | Alert |
+| :---: | :---: |
+| <img src="screenshots/idle.png" width="300"> | <img src="screenshots/down.png" width="300"> |
 
-![Alert](screenshots/down.png = 250x250)
 ## System Architecture
 
 The system operates on an Event-Driven Architecture (EDA). A Chaos Generator monitors services and pushes health logs to Kafka. The Dashboard visualizes this data live, while the AI Worker consumes critical alerts to trigger self-healing protocols.
