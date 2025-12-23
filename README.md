@@ -11,24 +11,31 @@ The system operates on an Event-Driven Architecture (EDA). A Chaos Generator mon
 ```mermaid
 graph TD
     subgraph Infrastructure
-        S1[Payment Service<br/>(Nginx/8080)]
-        S2[Inventory Service<br/>(Nginx/8081)]
+        S1["Payment Service
+        Nginx:8080"]
+        S2["Inventory Service
+        Nginx:8081"]
     end
 
-    subgraph Monitoring Loop
-        Gen[Chaos Generator<br/>Python] -->|HTTP Ping| S1
+    subgraph "Monitoring Loop"
+        Gen["Chaos Generator
+        Python"] -->|HTTP Ping| S1
         Gen -->|HTTP Ping| S2
         Gen -->|Produces Log| Kafka{Apache Kafka}
     end
 
     subgraph Visualization
-        Kafka -->|Consumes| Dash[Dashboard Backend<br/>C# .NET 9]
-        Dash -->|SignalR WebSocket| Browser[Web UI<br/>Real-Time Graph]
+        Kafka -->|Consumes| Dash["Dashboard Backend
+        C# .NET 9"]
+        Dash -->|SignalR WebSocket| Browser["Web UI
+        Real-Time Graph"]
     end
 
-    subgraph Self-Healing Pipeline
-        Kafka -->|Consumes Critical Log| Worker[AI Worker<br/>Python]
-        Worker -->|1. Send Error Context| LLM[Ollama API<br/>DeepSeek-R1]
+    subgraph "Self-Healing Pipeline"
+        Kafka -->|Consumes Critical Log| Worker["AI Worker
+        Python"]
+        Worker -->|1. Send Error Context| LLM["Ollama API
+        DeepSeek-R1"]
         LLM -->|2. Generate Fix Command| Worker
         Worker -->|3. Execute Shell Command| Docker[Docker CLI]
         Docker -->|Restart Container| S1
