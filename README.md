@@ -1,5 +1,17 @@
 # LogStream-AI: Self-Healing Polyglot Observability
 
+![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![.NET](https://img.shields.io/badge/.NET-9.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![C Sharp](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white)
+![Kafka](https://img.shields.io/badge/Apache_Kafka-231F20?style=for-the-badge&logo=apache-kafka&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
+![Ollama](https://img.shields.io/badge/Ollama-000000?style=for-the-badge&logo=ollama&logoColor=white)
+![DeepSeek](https://img.shields.io/badge/DeepSeek_R1-6F42C1?style=for-the-badge&logo=ai&logoColor=white)
+![SignalR](https://img.shields.io/badge/SignalR-512BD4?style=for-the-badge&logo=signalr&logoColor=white)
+![AI](https://img.shields.io/badge/AI_Powered-FF6B6B?style=for-the-badge&logo=robot&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+
 **LogStream-AI** is a proof-of-concept **Autonomous SRE (Site Reliability Engineering) Platform**. It demonstrates a fully closed-loop system where an AI agent monitors a polyglot microservices architecture, detects failures in real-time via Kafka, and autonomously repairs the infrastructure using Docker commands.
 
 ---
