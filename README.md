@@ -17,7 +17,7 @@
 ---
 | Operational | Alert |
 | :---: | :---: |
-| <img src="screenshots/idle.png" width="300"> | <img src="screenshots/down.png" width="300"> |
+| <img src="screenshots/idle.png" width="600"> | <img src="screenshots/down.png" width="600"> |
 
 ## System Architecture
 
